@@ -37,9 +37,9 @@ for i = 1:num_MHAcase
         P_av = eval(Pe_field);
         num_data = length(P_av);
         P_bhp = eval(['case_data{case_idx}.Tvar.Well.',Well_name,'.BottomHolePressure.data']);   %load the BHP data from well list
-        WIC = eval(['case_data{case_idx}.Tvar.Well.',Well_name,'.WaterInjectionCumulative.data']);   %load the Water Injection data from well list
-        LWIC = log(WIC);
-        LWIC(find(WIC==0)) = nan;  %remove the -inf data from LWIC
+        GIC = eval(['case_data{case_idx}.Tvar.Well.',Well_name,'.GasInjectionCumulative.data']);   %load the Water Injection data from well list
+        LGIC = log(GIC);
+        LGIC(find(GIC==0)) = nan;  %remove the -inf data from LGIC
         P_diff= P_bhp- P_av;    %difference pressure
         P_diff(find(P_diff<=0))=nan;    %remove non injection pressure
 
@@ -49,7 +49,7 @@ for i = 1:num_MHAcase
         DHI = zeros(num_data,1);
         DHI([1 num_data]) = nan;
         for i = 2: num_data-1
-            result = (HI(i+1)-HI(i-1))/(LWIC(i+1)-LWIC(i-1));
+            result = (HI(i+1)-HI(i-1))/(LGIC(i+1)-LGIC(i-1));
             if isfinite(result) ==1
                 DHI(i) = result;
             else
@@ -57,20 +57,20 @@ for i = 1:num_MHAcase
             end
         end
 
-        [departure_WIC,departure_HI,departure_DHI] = find_departure(WIC,HI,DHI);
+        [departure_GIC,departure_HI,departure_DHI] = find_departure(GIC,HI,DHI);
         
-        departure_WICPC = 100*5.615*departure_WIC/case_data{case_idx}.Tvar.Field.PoreVolume.data(1,1);
+        departure_GICPC = 100*departure_GIC/case_data{case_idx}.Tvar.Field.PoreVolume.data(1,1);
         
-        %        [departure_WICPerc] = findMHAPVIPerc(FieldPoreVolume,departure_WIC,case_idx,num_MHAcase);        
+        %        [departure_GICPerc] = findMHAPVIPerc(FieldPoreVolume,departure_GIC,case_idx,num_MHAcase);        
 
         %---------------------------------------------------------
         %Append HI/DHI into case_data
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.HI = HI;']);
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DHI = DHI;']);
-        eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepWIC = departure_WIC;']);
+        eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepGIC = departure_GIC;']);
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepHI = departure_HI;']);
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepDHI = departure_DHI;']);
-        eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepWICPVPC = departure_WICPC;']);
+        eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepGICPVPC = departure_GICPC;']);
     end
     
 end
@@ -80,7 +80,7 @@ if strcmp(choice,'Yes')==1
     Frame_data=save_MHAplot(MHA_case_idx,well_list,case_data);
     choice1 = questdlg('Do you want to open MHA interface to review them?','MHA interface','Yes','No','Yes');
     if strcmp(choice1,'Yes')
-        case_data = MHA_gui(case_data,Frame_data,'frame');
+        case_data = MHAGas_gui(case_data,Frame_data,'frame');
     end
 end
 
@@ -173,20 +173,20 @@ for loop_idx = 1:num_required_cases
         Well_name = well_list{well_index};
         HI = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.HI;']);
         DHI = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DHI;']);
-        WIC = eval(['case_data{case_idx}.Tvar.Well.',Well_name,'.WaterInjectionCumulative.data']); 
-        departure_WIC = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepWIC;']);
+        GIC = eval(['case_data{case_idx}.Tvar.Well.',Well_name,'.GasInjectionCumulative.data']); 
+        departure_GIC = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepGIC;']);
         departure_HI = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepHI;']);
         departure_DHI = eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepDHI;']);
         pic_name = [Case_name,'_',Well_name,'.png'];
         h = figure('visible','off');
-        plot(WIC,HI,WIC,DHI);
-        axis([0 range(WIC)*7/6 0 range(HI)*7/6]);
-        xlabel('Water Injection Cumulative');
+        plot(GIC,HI,GIC,DHI);
+        axis([0 range(GIC)*7/6 0 range(HI)*7/6]);
+        xlabel('Gas Injection Cumulative');
         ylabel('HI/DHI');
         legend('HI','DHI');
         legend('boxoff')
         hold on
-        scatter(departure_WIC,0.5*(departure_HI+departure_DHI),'filled');
+        scatter(departure_GIC,0.5*(departure_HI+departure_DHI),'filled');
         hold off
         Frame_data{i} = getframe(h);
         saveas(h,pic_name);
