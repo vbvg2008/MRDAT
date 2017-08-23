@@ -100,7 +100,7 @@ guidata(hObject, handles);
 
 % --- Outputs from this function are returned to the command line.
 function varargout = MHA_gui_OutputFcn(hObject, eventdata, handles) 
-handles.output = handles.case_data;
+
 varargout{1} = handles.output;
 
 
@@ -255,6 +255,11 @@ function Exit_Callback(hObject, eventdata, handles)
 % hObject    handle to Exit (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+MHA_gui_OutputFcn(hObject, eventdata, handles);
+case_data = handles.case_data;
+%might need to change this dir later
+save('case_data.mat','case_data');
+
 delete(handles.figure1);
 
 

@@ -15,4 +15,4 @@ case_data = ImportTvar(Dir,Tfilename);
 Pe = {'Tvar.Region.R23.DatumDepthCorrectedWaterPotential.data'};
 cd(Dir);
 case_data = MHA(Pe,case_data);  %during save, click no to exit program
-case_data = MHA_gui(case_data);
+MHA_gui(case_data);

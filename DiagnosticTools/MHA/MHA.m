@@ -19,9 +19,6 @@ num_cases = length(case_data);
 MHA_case_idx = 1:num_cases;
 well_list = fieldnames(case_data{1}.Tvar.Well);
 
-
-
-
 %---------------------------------------------
 %loop through all necessary cases
 num_MHAcase = length(MHA_case_idx);
@@ -58,10 +55,6 @@ for i = 1:num_MHAcase
         end
 
         [departure_WIC,departure_HI,departure_DHI] = find_departure(WIC,HI,DHI);
-        
-        departure_WICPC = 100*5.615*departure_WIC/case_data{case_idx}.Tvar.Field.PoreVolume.data(1,1);
-        
-        %        [departure_WICPerc] = findMHAPVIPerc(FieldPoreVolume,departure_WIC,case_idx,num_MHAcase);        
 
         %---------------------------------------------------------
         %Append HI/DHI into case_data
@@ -70,7 +63,6 @@ for i = 1:num_MHAcase
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepWIC = departure_WIC;']);
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepHI = departure_HI;']);
         eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepDHI = departure_DHI;']);
-        eval(['case_data{case_idx}.Diagnostics.MHA.',Well_name,'.DepWICPVPC = departure_WICPC;']);
     end
     
 end
@@ -80,7 +72,7 @@ if strcmp(choice,'Yes')==1
     Frame_data=save_MHAplot(MHA_case_idx,well_list,case_data);
     choice1 = questdlg('Do you want to open MHA interface to review them?','MHA interface','Yes','No','Yes');
     if strcmp(choice1,'Yes')
-        case_data = MHA_gui(case_data,Frame_data,'frame');
+        MHA_gui(case_data,Frame_data,'frame');
     end
 end
 
@@ -155,7 +147,6 @@ else
 end
 
 end
-
 
 function Frame_data=save_MHAplot(MHA_case_idx,well_list,case_data)  %generate plots and frame data
 mkdir('MHAplot');

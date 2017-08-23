@@ -19,9 +19,9 @@ for case_idx = 1: num_cases
     GasRate = case_data{case_idx}.Tvar.Field.GasProductionRate.data;
     OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
     GOR = GasRate./OilRate;
-    case_data{case_idx}.DerivedData.GOR.data= GOR;
+    case_data{case_idx}.DerivedData.Field.GOR.data= GOR;
     GOR_unit = 'MSCF/STB';
-    case_data{case_idx}.DerivedData.GOR.unit= GOR_unit;
+    case_data{case_idx}.DerivedData.Field.GOR.unit= GOR_unit;
 end
 
 
