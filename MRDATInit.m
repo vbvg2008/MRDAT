@@ -10,12 +10,8 @@ function  MRDATInit()
  addpath([current_path '/DiagnosticTools/MHA']);
  addpath([current_path '/DiagnosticTools/FPAnalysis']);
  addpath([current_path '/DiagnosticTools/WRPIAnalysis']);
- addpath([current_path '/DiagnosticTools/FWAnalysis']);
+ addpath([current_path '/DiagnosticTools/FPAnalysis']);
  
- if ~exist('WD','dir')
-     mkdir('WD');
- end
- cd 'WD';
  
  disp('MRDAT Path Added...');
   

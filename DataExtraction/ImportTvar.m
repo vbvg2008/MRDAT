@@ -59,14 +59,15 @@ for current_file_idx = 1:num_files
     %--Read-Unit-Headers--
     Punit_start_row = count_row_raw-count_row_num;
     Punit_start_col = count_col_raw-count_col_num+2;
-    [PUnits,~] = Read_Unit_Headers(Punit_start_row,Punit_start_col,count_col_raw,raw_data);
+    [PUnits,VarHeader] = Read_Unit_Headers(Punit_start_row,Punit_start_col,count_col_raw,raw_data);
 
     %--Get-CaseName--Parameter--FieldName--
-    [CHeader,PHeader,f] = Read_Case_Header(Punit_start_row,Punit_start_col,count_col_raw,raw_data);
+    [CHeader,FHeader,f] = Read_Case_Header(Punit_start_row,Punit_start_col,count_col_raw,raw_data);
 
     %-----Corret-Format-in the Header------------------
     CHeader = Correct_Format(CHeader,0);
-    PHeader = Correct_Format(PHeader,1);
+    FHeader = Correct_Format(FHeader,0);
+    VarHeader = Correct_Format(VarHeader,1);
     f = Correct_Format(f,0);
 
     %--Allocate-Data-Structure--
@@ -135,20 +136,19 @@ for current_file_idx = 1:num_files
         letter_id = field_identifier(1);
         switch letter_id
             case 'F'
-                eval(['data{location_idx}.Tvar.Field.',PHeader{idx},'.data = num_data(:,idx+1);']);
-                eval(['data{location_idx}.Tvar.Field.',PHeader{idx},'.unit = PUnits{idx};']);
+                eval(['data{location_idx}.Tvar.Field.',VarHeader{idx},'.data = num_data(:,idx+1);']);
+                eval(['data{location_idx}.Tvar.Field.',VarHeader{idx},'.unit = PUnits{idx};']);
             case 'R'
-                eval(['data{location_idx}.Tvar.Region.',field_identifier,'.',PHeader{idx},'.data = num_data(:,idx+1);']);
-                eval(['data{location_idx}.Tvar.Region.',field_identifier,'.',PHeader{idx},'.unit = PUnits{idx};']);
+                eval(['data{location_idx}.Tvar.Region.',FHeader{idx},'.',VarHeader{idx},'.data = num_data(:,idx+1);']);
+                eval(['data{location_idx}.Tvar.Region.',FHeader{idx},'.',VarHeader{idx},'.unit = PUnits{idx};']);
             case 'G'
-                eval(['data{location_idx}.Tvar.Group.',field_identifier,'.',PHeader{idx},'.data = num_data(:,idx+1);']);
-                eval(['data{location_idx}.Tvar.Group.',field_identifier,'.',PHeader{idx},'.unit = PUnits{idx};']);           
+                eval(['data{location_idx}.Tvar.Group.',FHeader{idx},'.',VarHeader{idx},'.data = num_data(:,idx+1);']);
+                eval(['data{location_idx}.Tvar.Group.',FHeader{idx},'.',VarHeader{idx},'.unit = PUnits{idx};']);           
             case {'W','I','P'}
-                eval(['data{location_idx}.Tvar.Well.',field_identifier,'.',PHeader{idx},'.data = num_data(:,idx+1);']);
-                eval(['data{location_idx}.Tvar.Well.',field_identifier,'.',PHeader{idx},'.unit = PUnits{idx};']);
-            otherwise %treat it as region
-                eval(['data{location_idx}.Tvar.Region.R',field_identifier,'.',PHeader{idx},'.data = num_data(:,idx+1);']);
-                eval(['data{location_idx}.Tvar.Region.R',field_identifier,'.',PHeader{idx},'.unit = PUnits{idx};']);
+                eval(['data{location_idx}.Tvar.Well.',FHeader{idx},'.',VarHeader{idx},'.data = num_data(:,idx+1);']);
+                eval(['data{location_idx}.Tvar.Well.',FHeader{idx},'.',VarHeader{idx},'.unit = PUnits{idx};']);
+            otherwise %error
+                error('Unknown file identifier');
         end
 
     end
@@ -157,7 +157,7 @@ end
     disp('Loading Tvar data completed!');
 end
 %%
-function [CHeader,PHeader,f] = Read_Case_Header(Punit_start_row,Punit_start_col,count_col_raw,raw_data)
+function [CHeader,FHeader,f] = Read_Case_Header(Punit_start_row,Punit_start_col,count_col_raw,raw_data)
 
 %--Read-Case-Headers-and Parameter-Headers--
 CHeader_start_row = Punit_start_row-1;
@@ -167,43 +167,33 @@ CTotalHeader = raw_data(CHeader_start_row,CHeader_start_col:count_col_raw);
 CHeader_Count = length(CTotalHeader);
 
 CHeader = cell(1,CHeader_Count);
-PHeader = cell(1,CHeader_Count);
+FHeader = cell(1,CHeader_Count);
 f = cell(1,CHeader_Count);
 
-File_identifier_string = raw_data{1,1};
-Sample_CHeader = CTotalHeader{1};
-
-[comma_s]= regexpi(Sample_CHeader,',');
-
-if length(comma_s)==2
-     File_identifier_string= [];
-else
-    [FIPNUM_s,FIPNUM_e]= regexpi(File_identifier_string,'FIPNUM');
-    if isempty(FIPNUM_s)~=1
-        File_identifier_string(FIPNUM_s:FIPNUM_e) = [];
-        [comma_s2]= regexpi(File_identifier_string,',');
-        File_identifier_string(comma_s2)=[];
-    end
-end
+f_identifier = raw_data{1,1};
 
 
 for idx = 1:CHeader_Count
 
     tem_string = CTotalHeader{idx};   %temporary string storing each case header
     start_idx = regexpi(tem_string,',');    %find the start index of ','
-    if isempty(File_identifier_string)==0   %if file identifier is non-empty
-        if isempty(start_idx)==1   %case header has no ","
-            tem_string = [tem_string,',',File_identifier_string];  %add tem_string with file_identifier string
-        else
-            tem_string = [tem_string(1:start_idx(1)-1),',',File_identifier_string,tem_string(start_idx(1):end)];
-        end
+
+    if isempty(start_idx)==1   %case header has no ","
+        tem_string = [tem_string,',',f_identifier];  %add tem_string with file_identifier string
+    else
+        tem_string = [tem_string(1:start_idx(1)-1),',',f_identifier,tem_string(start_idx(1):end)];
     end
+
     comma_idx = regexpi(tem_string,',');
     num_comma = length(comma_idx);
     if num_comma == 2
         CHeader{idx} = tem_string(1:comma_idx(1)-1); %before first "," is Case Header
         f{idx} = tem_string(comma_idx(1)+1:comma_idx(2)-1);%between two "," is field identifier
-        PHeader{idx} = tem_string(comma_idx(2)+1:end); %after second "," is Parameter Name
+        FHeader{idx} = tem_string(comma_idx(2)+1:end); %after second "," is Parameter Name
+    elseif num_comma == 1 %then it is for field
+        CHeader{idx} = tem_string(1:comma_idx(1)-1); %before first "," is Case Header
+        f{idx} = tem_string(comma_idx(1)+1:end);%between two "," is field identifier
+        FHeader{idx} = 'Unkown'; %after second "," is Parameter Name
     else
         error('unsupported case header format...');
     end
@@ -220,8 +210,13 @@ function [PUnits,VarHeader] = Read_Unit_Headers(Punit_start_row,Punit_start_col,
         tem_string = ParameterUnits{idx};   %temporary string storing each header
         start_idx = regexpi(tem_string,'[');    %find the start index of '['
         end_idx = regexpi(tem_string,']');      %find the start index of ']'
-        PUnits{idx}= tem_string(start_idx+1:end_idx-1); %extract header units
-        VarHeader{idx} = tem_string(1:start_idx-1);
+        if isempty(start_idx)==1
+            PUnits{idx} = 'None';
+             VarHeader{idx} = tem_string;
+        else     
+            PUnits{idx}= tem_string(start_idx+1:end_idx-1); %extract header units
+            VarHeader{idx} = tem_string(1:start_idx-1);
+        end
     end
 end
 %%
@@ -234,20 +229,15 @@ num_cell = length(InputHeader);
 OutputHeader = cell(1,num_cell);
 for idx = 1:num_cell
     tem_string = InputHeader{idx};
-    char_length = length(tem_string);
+    tem_string = strtrim(tem_string);
     blank_idx = regexpi(tem_string,' ');
-    blank_idx_length = length(blank_idx);
     dash_idx = regexpi(tem_string,'-');
     and_idx = regexpi(tem_string,'&');
     switch option
         case 0 
             tem_string([blank_idx,dash_idx,and_idx])=[];
         case 1
-            if blank_idx(blank_idx_length) == char_length %if the blank space is at end
-                tem_string(blank_idx(1:end-1)+1)=upper(tem_string(blank_idx(1:end-1)+1));
-            else  %the blank space is not at end
-                tem_string(blank_idx(1:end)+1)=upper(tem_string(blank_idx(1:end)+1));
-            end
+            tem_string(blank_idx(1:end)+1)=upper(tem_string(blank_idx(1:end)+1));
             tem_string([blank_idx,dash_idx,and_idx])=[];
         otherwise
             error('Unidentified option number when correcting header format');
@@ -271,6 +261,4 @@ for idx = 1:count_row_num
     end
 end
 cum_time = cumsum(del_time);
-
-
 end
