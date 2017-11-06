@@ -3,6 +3,8 @@ function [dydx, dydxmin, idydxmin, xmin, dydxmax, idydxmax, xmax] = SlopeFuncMin
 %         Determines also minimum value of dydx and corresponding x.
 %         Determines also maximum value of dydx and corresponding x.   
 %
+% Last update: 07/24/2017
+%
 % SYNOPSIS: 
 %   x        = an array (X-dimension)
 %   y        = another array (Y-dimension) of same length as x
@@ -32,15 +34,15 @@ function [dydx, dydxmin, idydxmin, xmin, dydxmax, idydxmax, xmax] = SlopeFuncMin
 %
 %---------------------------------------------------------------------
 
-dx = mean(diff(x));
+dx = mean(diff(x), 'omitnan');
 dydx = gradient(y,dx);
 
-%[dydxmin, idydxmin] = min(dydx);
-[dydxmin, idydxmin] = min(dydx(isfinite(dydx))); % Avoid -Inf, Inf and NaN values
+[dydxmin, idydxmin] = min(dydx);
+% [dydxmin, idydxmin] = min(dydx(isfinite(dydx))); % Avoid -Inf, Inf and NaN values
 xmin = x(idydxmin);
 
-%[dydxmax, idydxmax] = max(dydx);
-[dydxmax, idydxmax] = max(dydx(isfinite(dydx))); % Avoid -Inf, Inf and NaN values
+[dydxmax, idydxmax] = max(dydx);
+% [dydxmax, idydxmax] = max(dydx(isfinite(dydx))); % Avoid -Inf, Inf and NaN values
 xmax = x(idydxmax);
 
 end
