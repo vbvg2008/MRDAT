@@ -11,7 +11,7 @@ function  MRDATInit()
  addpath([current_path '/DiagnosticTools/FPAnalysis']);
  addpath([current_path '/DiagnosticTools/WRPIAnalysis']);
  addpath([current_path '/DiagnosticTools/FPAnalysis']);
- 
+ addpath([current_path '/DiagnosticTools/FWAnalysis']);
  
  disp('MRDAT Path Added...');
   
