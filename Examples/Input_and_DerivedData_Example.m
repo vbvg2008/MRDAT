@@ -139,13 +139,23 @@ case_data = [case_data_320ac; case_data_320acNG];
 case_list = [case_list_320ac; case_list_320acNG];
 
 
-%% Scenario Multi-well (Dataset: MW.mat) 
-TvarDir = 'C:\Users\Any Clariseth\Documents\MATLAB\WD\Data\MW';
-CaseParaDir = 'C:\Users\Any Clariseth\Documents\MATLAB\WD\Data';
-CasePara_FileName = 'CaseParam_MW.xlsx';
+%% Scenario Multi-well (Dataset: MW_100Cases_01122018.mat) 
+TvarDir = 'C:\Users\Any Clariseth\Documents\MATLAB\Data\Data_MW_300Cases\Data';
+CaseParaDir = 'C:\Users\Any Clariseth\Documents\MATLAB\Data\Data_MW_300Cases';
+CasePara_FileName = 'CasePara_MW_300Cases.xlsx';
 
 [case_data,case_list] = ImportTvar(TvarDir);
 case_data = ImportCasePara(CaseParaDir,CasePara_FileName,case_data);
+
+dir = 'C:\Users\Any Clariseth\Documents\MATLAB\Data\Data_MW_300Cases\GRDECL';
+fileName_perm = 'PERMX.GRDECL';
+fileName_region = 'Region.GRDECL';
+nk = 52;
+num_cases = 100;
+keywordName = 'FIP_ADD';
+
+grid_data = ImportGRDECL_perm(dir, fileName_perm, nK, num_cases);
+grid_data = ImportGRDECL_Region(dir, fileName_region, nK, keywordName, grid_data);
 
 
 %% ******************** Derived Data ********************
@@ -158,6 +168,7 @@ case_data = RPI(case_data); % reciprocal productivity index
 case_data = ErsaghiIndex(case_data); % Ersaghi index 
 case_data = MBT(case_data); % material balance time
 case_data = HCPVI(case_data); % hydrocarbon pore volume injected
+case_data = RF(case_data); % oil recovery efficiency
 
 
 

@@ -1,7 +1,7 @@
 function case_data = OC(case_data)
 % Calculte Oil cut 
 %
-% Last Update Date: 10/30/2017 
+% Last Update Date: 11/06/2017 
 %
 %SYNOPSIS:
 %   case_data = OC(case_data)
@@ -16,12 +16,17 @@ num_cases = length(case_data);
 
 % Field Oil Cut
 for case_idx = 1: num_cases
-    WaterRate = case_data{case_idx}.Tvar.Field.WaterProductionRate.data;
-    OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
-    OC = OilRate./(OilRate + WaterRate);
-    case_data{case_idx}.DerivedData.Field.OC.data= OC;
-    OC_unit = 'STB/STB';
-    case_data{case_idx}.DerivedData.Field.OC.unit= OC_unit;
+    field_Tvar_list = fieldnames(case_data{case_idx}.Tvar.Field);
+    FWaterRate_flag = contains(field_Tvar_list, 'WaterProductionRate');
+    FOilRate_flag = contains(field_Tvar_list, 'OilProductionRate');
+    if sum(FWaterRate_flag)==1 && sum(FOilRate_flag)==1
+        WaterRate = case_data{case_idx}.Tvar.Field.WaterProductionRate.data;
+        OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
+        OC = OilRate./(OilRate + WaterRate);
+        case_data{case_idx}.DerivedData.Field.OC.data= OC;
+        OC_unit = 'STB/STB';
+        case_data{case_idx}.DerivedData.Field.OC.unit= OC_unit;
+    end
     
     % List and number of wells
     well_list = fieldnames(case_data{case_idx}.Tvar.Well);

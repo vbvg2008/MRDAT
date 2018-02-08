@@ -1,4 +1,5 @@
-function FinalHCPVIvsFinalRF(case_data)
+function [WBT_HCPVI, WBT_HCPVI_HT, FinalHCPVI, FinalHCPVI_HT, FinalRF, FinalRF_HT, ChanPlotFlag, ChanPlotFlag_HT]=FinalHCPVIvsFinalRF(case_data)
+% [WBT_HCPVI, WBT_HCPVI_HT, FinalHCPVI, FinalHCPVI_HT, FinalRF, FinalRF_HT, ChanPlotFlag, ChanPlotFlag_HT]=FinalHCPVIvsFinalRF(case_data)
 % Generate water injected vs oil recovery performance plots
 %
 % Last Update Date: 10/26/2017

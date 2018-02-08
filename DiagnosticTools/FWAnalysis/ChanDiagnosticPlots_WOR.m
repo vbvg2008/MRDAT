@@ -2,7 +2,7 @@ function case_data = ChanDiagnosticPlots_WOR(case_data, save_flag, scenario_type
 
 % Determine the water production problem according to Chan diagnostic plots
 %
-% Last Update Date: 11/03/2017
+% Last Update Date: 12/29/2017
 %
 %SYNOPSIS:
 %   case_data = ChanDiagnosticPlots_WOR(case_data, save_flag, scenario_type)
@@ -19,12 +19,12 @@ function case_data = ChanDiagnosticPlots_WOR(case_data, save_flag, scenario_type
 %
 
 if save_flag==1
-    if ~exist('Chan_Plots','dir')
-        mkdir('Chan_Plots');
+    if ~exist('WD/Chan_Plots','dir')
+        mkdir('WD/Chan_Plots');
     else
-        delete('Chan_Plots/*.png');
+        delete('WD/Chan_Plots/*.png');
     end
-    cd 'Chan_Plots';
+    cd 'WD/Chan_Plots';
 end
 
 num_cases = length(case_data);
@@ -187,7 +187,10 @@ for case_idx=1:num_cases
                 Time = case_data{case_idx,1}.Tvar.Time.cumt;
                 TotalDaysIdx = length(Time);
                 FinalWOR = WOR(TotalDaysIdx);
+                BeforeFinalWOR = WOR(TotalDaysIdx-1);
                 if FinalWOR ==0
+                    ChanPlotFlag = 5; % No water production
+                elseif FinalWOR >0 & BeforeFinalWOR==0
                     ChanPlotFlag = 5; % No water production
                 elseif FinalWOR > 0
                     
@@ -220,6 +223,7 @@ for case_idx=1:num_cases
                     % Smooth the data using the rloess with a span of 30%:
                     %   For the loess and lowess methods, span is a percentage of the total number of data points, less than or equal to 1.
                     %   For the moving average and Savitzky-Golay methods, span must be odd (an even span is automatically reduced by 1).
+                                 
                     yy1 = smooth(x1,y1,0.3,'rloess');
                     yy2 = smooth(x2,y2,0.3,'rloess');
                     
@@ -332,6 +336,7 @@ for case_idx=1:num_cases
 end
 
 if save_flag==1
+    cd '../';
     cd '../';
 end
 

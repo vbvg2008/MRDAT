@@ -1,7 +1,7 @@
 function case_data = WOR(case_data)
 % Calculte Water Oil Ratio 
 %
-% Last Update Date: 10/30/2017 
+% Last Update Date: 11/06/2017 
 %
 %SYNOPSIS:
 %   case_data = WOR(case_data)
@@ -16,12 +16,17 @@ num_cases = length(case_data);
 
 % Field Water-Oil Ratio 
 for case_idx = 1: num_cases
-    WaterRate = case_data{case_idx}.Tvar.Field.WaterProductionRate.data;
-    OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
-    WOR = WaterRate./OilRate;
-    case_data{case_idx}.DerivedData.Field.WOR.data= WOR;
-    WOR_unit = 'STB/STB';
-    case_data{case_idx}.DerivedData.Field.WOR.unit= WOR_unit;
+    field_Tvar_list = fieldnames(case_data{case_idx}.Tvar.Field);
+    FWaterRate_flag = contains(field_Tvar_list, 'WaterProductionRate');
+    FOilRate_flag = contains(field_Tvar_list, 'OilProductionRate');
+    if sum(FWaterRate_flag)==1 && sum(FOilRate_flag)==1        
+        WaterRate = case_data{case_idx}.Tvar.Field.WaterProductionRate.data;
+        OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
+        WOR = WaterRate./OilRate;
+        case_data{case_idx}.DerivedData.Field.WOR.data= WOR;
+        WOR_unit = 'STB/STB';
+        case_data{case_idx}.DerivedData.Field.WOR.unit= WOR_unit;
+    end
     
     % List and number of wells
     well_list = fieldnames(case_data{case_idx}.Tvar.Well);

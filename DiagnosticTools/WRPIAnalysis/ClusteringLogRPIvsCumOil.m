@@ -19,25 +19,25 @@ TotalDaysIdx = length(case_data{1,1}.Tvar.Time.cumt);
 for i=1:num_cases
     InitialRPI(i,1) = case_data{i,1}.DerivedData.WPRO2.RPI.data(2);
     FinalCumOil(i,1) = case_data{i,1}.Tvar.Field.OilProductionCumulative.data(TotalDaysIdx);
-    Kx_Lower(i,1) = case_data{i,1}.KX_LOWER;
-    Kx_Upper(i,1) = case_data{i,1}.KX_UPPER;
-    TransMultMiddle(i,1) = case_data{i,1}.TRANSMULT_MIDDLE;
-    Poro_Lower(i,1) = case_data{i,1}.PORO_LOWER;
-    Poro_Upper(i,1) = case_data{i,1}.PORO_UPPER;
-    KyKx_Upper(i,1) = case_data{i,1}.KYKX_UPPER;
-    KyKx_Lower(i,1) = case_data{i,1}.KYKX_LOWER;
-    OWC(i,1) = case_data{i,1}.OWC;
-    WOCPc(i,1) = case_data{i,1}.WOCPc;
-    OilAPI(i,1) = case_data{i,1}.OIL_API;
-    SolGOR(i,1) = case_data{i,1}.SOL_GOR;
-    KvKh_Upper(i,1) = case_data{i,1}.KVKH_UPPER;
-    KvKh_Lower(i,1) = case_data{i,1}.KVKH_LOWER;
-    Sw_Pc0(i,1) = case_data{i,1}.SW_PC0;
-    Sorw(i,1) = case_data{i,1}.SORW;
-    GasGravity(i,1) = case_data{i,1}.GASGRAV;
-    RockComp(i,1) = case_data{i,1}.COMPRESSIBILITY;
-    Swcr(i,1) = case_data{i,1}.SWCR;
-    Salinity(i,1) = case_data{i,1}.SALINITY;    
+%     Kx_Lower(i,1) = case_data{i,1}.KX_LOWER;
+%     Kx_Upper(i,1) = case_data{i,1}.KX_UPPER;
+%     TransMultMiddle(i,1) = case_data{i,1}.TRANSMULT_MIDDLE;
+%     Poro_Lower(i,1) = case_data{i,1}.PORO_LOWER;
+%     Poro_Upper(i,1) = case_data{i,1}.PORO_UPPER;
+%     KyKx_Upper(i,1) = case_data{i,1}.KYKX_UPPER;
+%     KyKx_Lower(i,1) = case_data{i,1}.KYKX_LOWER;
+%     OWC(i,1) = case_data{i,1}.OWC;
+%     WOCPc(i,1) = case_data{i,1}.WOCPc;
+%     OilAPI(i,1) = case_data{i,1}.OIL_API;
+%     SolGOR(i,1) = case_data{i,1}.SOL_GOR;
+%     KvKh_Upper(i,1) = case_data{i,1}.KVKH_UPPER;
+%     KvKh_Lower(i,1) = case_data{i,1}.KVKH_LOWER;
+%     Sw_Pc0(i,1) = case_data{i,1}.SW_PC0;
+%     Sorw(i,1) = case_data{i,1}.SORW;
+%     GasGravity(i,1) = case_data{i,1}.GASGRAV;
+%     RockComp(i,1) = case_data{i,1}.COMPRESSIBILITY;
+%     Swcr(i,1) = case_data{i,1}.SWCR;
+%     Salinity(i,1) = case_data{i,1}.SALINITY;    
 end
 
 %% Clustering Analysis
@@ -108,147 +108,147 @@ saveas(gcf, 'RPIvsNp_Cluster.png');
 % % % saveas(gcf, 'RPIvsNp_ClusterHistogram.png');
 % % % 
 
-% Cluster relationship with 18 parameters (all, except salinity)
-
-figure; % Fig 1 (Grid properties)
-
-subplot(3, 3, 1);
-gscatter(ClusterGroup, log10(Kx_Upper),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(Kx_Upper), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Kx Upper');
-grid on; legend('off');
-
-subplot(3, 3, 2);
-gscatter(ClusterGroup, log10(KyKx_Upper),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(KyKx_Upper), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('KyKx Upper');
-grid on; legend('off');
-
-subplot(3, 3, 3);
-gscatter(ClusterGroup, log10(KvKh_Upper),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(KvKh_Upper), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('KvKh Upper');
-grid on; legend('off');
-
-subplot(3, 3, 4);
-gscatter(ClusterGroup, log10(Kx_Lower),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(Kx_Lower), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Kx Lower');
-grid on; legend('off');
-
-subplot(3, 3, 5);
-gscatter(ClusterGroup, log10(KyKx_Lower),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(KyKx_Lower), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('KyKx Lower');
-grid on; legend('off');
-
-subplot(3, 3, 6);
-gscatter(ClusterGroup, log10(KvKh_Lower),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(KvKh_Lower), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('KvKh Lower');
-grid on; legend('off');
-
-subplot(3, 3, 7);
-gscatter(ClusterGroup, Poro_Upper,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, Poro_Upper, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Poro Upper');
-grid on; legend('off');
-
-subplot(3, 3, 8);
-gscatter(ClusterGroup, Poro_Lower,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, Poro_Lower, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Poro Lower');
-grid on; legend('off');
-
-subplot(3, 3, 9);
-gscatter(ClusterGroup, log10(TransMultMiddle),ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, log10(TransMultMiddle), 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('TransMultMiddle');
-grid on; 
-leg1 = legend('show');
-rect = [0.92, 0.33, .09, .25];
-set(leg1, 'Position', rect);
-saveas(gcf, 'RPIvsNp_ClusterProps1.png');
-
-
-figure; % Fig 2 (Fluid and rock properties)
-
-subplot(3, 3, 1);
-gscatter(ClusterGroup, OilAPI,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, OilAPI, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Oil API');
-grid on; legend('off');
-
-subplot(3, 3, 2);
-gscatter(ClusterGroup, GasGravity,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, GasGravity, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Gas Gravity');
-grid on; legend('off');
-
-subplot(3, 3, 3);
-gscatter(ClusterGroup, SolGOR,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, SolGOR, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Sol GOR');
-grid on; legend('off');
-
-subplot(3, 3, 4);
-gscatter(ClusterGroup, OWC,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, OWC, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('OWC');
-grid on; legend('off');
-
-subplot(3, 3, 5);
-gscatter(ClusterGroup, WOCPc,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, WOCPc, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Pc at OWC');
-grid on; legend('off');
-
-subplot(3, 3, 6);
-gscatter(ClusterGroup, RockComp,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, RockComp, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Rock Compressibility');
-grid on; legend('off');
-
-subplot(3, 3, 7);
-gscatter(ClusterGroup, Swcr,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, Swcr, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Swcr');
-grid on; legend('off');
-
-subplot(3, 3, 8);
-gscatter(ClusterGroup, Sorw,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, Sorw, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Sorw');
-grid on; legend('off');
-
-subplot(3, 3, 9);
-gscatter(ClusterGroup, Sw_Pc0,ClusterGroup, c, '.', 15);
-%scatter(ClusterGroup, Sw_Pc0, 50, ClusterGroup, 'filled');
-xlabel('Cluster');
-ylabel('Sw at Pc=0');
-grid on; 
-leg2 = legend('show');
-rect = [0.92, 0.33, .09, .25];
-set(leg2, 'Position', rect);
-
-saveas(gcf, 'RPIvsNp_ClusterProps2.png');
+% % % % Cluster relationship with 18 parameters (all, except salinity)
+% % % 
+% % % figure; % Fig 1 (Grid properties)
+% % % 
+% % % subplot(3, 3, 1);
+% % % gscatter(ClusterGroup, log10(Kx_Upper),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(Kx_Upper), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Kx Upper');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 2);
+% % % gscatter(ClusterGroup, log10(KyKx_Upper),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(KyKx_Upper), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('KyKx Upper');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 3);
+% % % gscatter(ClusterGroup, log10(KvKh_Upper),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(KvKh_Upper), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('KvKh Upper');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 4);
+% % % gscatter(ClusterGroup, log10(Kx_Lower),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(Kx_Lower), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Kx Lower');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 5);
+% % % gscatter(ClusterGroup, log10(KyKx_Lower),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(KyKx_Lower), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('KyKx Lower');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 6);
+% % % gscatter(ClusterGroup, log10(KvKh_Lower),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(KvKh_Lower), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('KvKh Lower');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 7);
+% % % gscatter(ClusterGroup, Poro_Upper,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, Poro_Upper, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Poro Upper');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 8);
+% % % gscatter(ClusterGroup, Poro_Lower,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, Poro_Lower, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Poro Lower');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 9);
+% % % gscatter(ClusterGroup, log10(TransMultMiddle),ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, log10(TransMultMiddle), 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('TransMultMiddle');
+% % % grid on; 
+% % % leg1 = legend('show');
+% % % rect = [0.92, 0.33, .09, .25];
+% % % set(leg1, 'Position', rect);
+% % % saveas(gcf, 'RPIvsNp_ClusterProps1.png');
+% % % 
+% % % 
+% % % figure; % Fig 2 (Fluid and rock properties)
+% % % 
+% % % subplot(3, 3, 1);
+% % % gscatter(ClusterGroup, OilAPI,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, OilAPI, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Oil API');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 2);
+% % % gscatter(ClusterGroup, GasGravity,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, GasGravity, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Gas Gravity');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 3);
+% % % gscatter(ClusterGroup, SolGOR,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, SolGOR, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Sol GOR');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 4);
+% % % gscatter(ClusterGroup, OWC,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, OWC, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('OWC');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 5);
+% % % gscatter(ClusterGroup, WOCPc,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, WOCPc, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Pc at OWC');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 6);
+% % % gscatter(ClusterGroup, RockComp,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, RockComp, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Rock Compressibility');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 7);
+% % % gscatter(ClusterGroup, Swcr,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, Swcr, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Swcr');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 8);
+% % % gscatter(ClusterGroup, Sorw,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, Sorw, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Sorw');
+% % % grid on; legend('off');
+% % % 
+% % % subplot(3, 3, 9);
+% % % gscatter(ClusterGroup, Sw_Pc0,ClusterGroup, c, '.', 15);
+% % % %scatter(ClusterGroup, Sw_Pc0, 50, ClusterGroup, 'filled');
+% % % xlabel('Cluster');
+% % % ylabel('Sw at Pc=0');
+% % % grid on; 
+% % % leg2 = legend('show');
+% % % rect = [0.92, 0.33, .09, .25];
+% % % set(leg2, 'Position', rect);
+% % % 
+% % % saveas(gcf, 'RPIvsNp_ClusterProps2.png');
 
 
 % % % BloxPlot

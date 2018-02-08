@@ -17,6 +17,9 @@ num_cases = length(case_data);
 
 % Field Ersaghi Index
 for case_idx = 1: num_cases
+    field_Tvar_list = fieldnames(case_data{case_idx}.DerivedData.Field);
+    FWaterCut_flag = contains(field_Tvar_list, 'WC');
+    
     fw = case_data{case_idx}.DerivedData.Field.WC.data;
     ErsaghiId = log((1./fw)-1)-(1./fw);
     case_data{case_idx}.DerivedData.Field.ErsaghiId.data= ErsaghiId;

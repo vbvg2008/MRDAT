@@ -1,7 +1,7 @@
 function case_data = GOR(case_data)
 % Calculte Gas Oil Ratio
 %
-% Last Update Date: 10/30/2017 
+% Last Update Date: 11/06/2017 
 %
 %SYNOPSIS:
 %   case_data = GOR(case_data)
@@ -16,12 +16,17 @@ num_cases = length(case_data);
 
 % Field Gas-Oil Ratio
 for case_idx = 1: num_cases
-    GasRate = case_data{case_idx}.Tvar.Field.GasProductionRate.data;
-    OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
-    GOR = GasRate./OilRate;
-    case_data{case_idx}.DerivedData.Field.GOR.data= GOR;
-    GOR_unit = 'MSCF/STB';
-    case_data{case_idx}.DerivedData.Field.GOR.unit= GOR_unit;
+    field_Tvar_list = fieldnames(case_data{case_idx}.Tvar.Field);
+    FGasRate_flag = contains(field_Tvar_list, 'GasProductionRate');
+    FOilRate_flag = contains(field_Tvar_list, 'OilProductionRate');
+    if sum(FGasRate_flag)==1 && sum(FOilRate_flag)==1
+        GasRate = case_data{case_idx}.Tvar.Field.GasProductionRate.data;
+        OilRate = case_data{case_idx}.Tvar.Field.OilProductionRate.data;
+        GOR = GasRate./OilRate;
+        case_data{case_idx}.DerivedData.Field.GOR.data= GOR;
+        GOR_unit = 'MSCF/STB';
+        case_data{case_idx}.DerivedData.Field.GOR.unit= GOR_unit;
+    end
     
     % List and number of wells
     well_list = fieldnames(case_data{case_idx}.Tvar.Well);

@@ -2,7 +2,7 @@ function Yfunction(case_data)
 
 % Determine the Y-function and generate diagnostic plots proposed by Yang (2009)
 %
-% Last Update Date: 10/26/2017
+% Last Update Date: 01/05/2018
 %
 %SYNOPSIS:
 %   Yfunction(case_data)
@@ -18,10 +18,10 @@ function Yfunction(case_data)
 
 num_cases = length(case_data);
 
-if ~exist('Y-function Plots','dir')
-    mkdir('Y-function Plots');
+if ~exist('WD/Y-function Plots','dir')
+    mkdir('WD/Y-function Plots');
 end
-cd 'Y-function Plots';
+cd 'WD/Y-function Plots';
 
 for i = 1: num_cases
     % Input data
@@ -37,8 +37,8 @@ for i = 1: num_cases
     case_data{i,1}.Diagnostics.FWA.Field.Yfunction = Yfunction;
     
     % Generate and save plots
-    if sum(WaterCut, 'omitnan')>0
-    %if min(WaterCut, 'omitnan')>0.5
+    %if sum(WaterCut, 'omitnan')>0
+    if min(WaterCut, 'omitnan')>0.5
         % loglog plots
         figure('visible', 'off');
         loglog(LiqCum, Yfunction, '-s');
@@ -61,6 +61,7 @@ for i = 1: num_cases
     end
 end
 
+cd '../';
 cd '../';
 
 end

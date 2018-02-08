@@ -16,12 +16,12 @@ function case_data = WaterBreakthrough_byWell(case_data, save_flag)
 %
 
 if save_flag==1
-    if ~exist('WBT_Plots','dir')
-        mkdir('WBT_Plots');
+    if ~exist('WD\WBT_Plots','dir')
+        mkdir('WD\WBT_Plots');
     else
-        delete('WBT_Plots/*.png');
+        delete('WD\WBT_Plots/*.png');
     end
-    cd 'WBT_Plots';
+    cd 'WD\WBT_Plots';
 end
 
 num_cases = length(case_data);
@@ -38,7 +38,7 @@ for case_idx=1:num_cases
             TotalDaysIdx = length(Time);
             InitialWOR = WOR(2);
             FinalWOR = WOR(TotalDaysIdx);
-            FinalWcut(well_idx) = eval(['case_data{case_idx,1}.DerivedData.Well',well_name,'.WC.data(TotalDaysIdx)']);
+            FinalWcut(well_idx) = eval(['case_data{case_idx,1}.DerivedData.Well.',well_name,'.WC.data(TotalDaysIdx)']);
             InitialWcut(well_idx) = eval(['case_data{case_idx,1}.DerivedData.Well.', well_name, '.WC.data(2)']);
             
             if FinalWOR > 0
@@ -114,6 +114,7 @@ for case_idx=1:num_cases
 end
 
 if save_flag==1
+    cd '../';
     cd '../';
 end
 
